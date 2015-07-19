@@ -1,0 +1,30 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/bg_titlebar">
+
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:src="@drawable/logo_titlebar"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/ib_titlebar_back"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/btn_back_titlebar_selector"/>
+
+    <ImageView
+        android:id="@+id/ib_titlebar_category"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="-6dp"
+        android:src="@drawable/btn_category_titlebar_selector"
+        android:layout_toLeftOf="@+id/ib_titlebar_back"/>
+
+</RelativeLayout>

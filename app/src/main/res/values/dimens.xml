@@ -1,0 +1,7 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="home_area_margin_left">6dp</dimen>
+    <dimen name="home_area_margin_right">6dp</dimen>
+    <dimen name="home_area_margin_top">10dp</dimen>
+    <dimen name="home_area_margin_bottom">10dp</dimen>
+</resources>

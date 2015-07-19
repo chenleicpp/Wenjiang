@@ -1,0 +1,86 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/titlebar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网站导航"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:text="农业资讯"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:background="@drawable/bg_category_text"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#639D2E"/>
+            <!-- 农业资讯 -->
+            <com.sanshisoft.wenjiang.view.ExGridView
+                android:id="@+id/gv_nyzx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:numColumns="2"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="5dp" />
+            <!-- 政务服务 -->
+            <com.sanshisoft.wenjiang.view.ExGridView
+                android:id="@+id/gv_zwfw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="2"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="5dp" />
+            <!-- 党建工作 -->
+            <com.sanshisoft.wenjiang.view.ExGridView
+                android:id="@+id/gv_djgz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="2"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="5dp" />
+            <!-- 专题专栏 -->
+            <com.sanshisoft.wenjiang.view.ExGridView
+                android:id="@+id/gv_ztzl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="2"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="5dp" />
+            <!-- 休闲农业 -->
+            <com.sanshisoft.wenjiang.view.ExGridView
+                android:id="@+id/gv_xxny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="2"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="5dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

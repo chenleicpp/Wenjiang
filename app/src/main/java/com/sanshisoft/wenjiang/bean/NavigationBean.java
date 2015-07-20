@@ -5,40 +5,40 @@ package com.sanshisoft.wenjiang.bean;
  * 导航子栏目实体类
  */
 public class NavigationBean {
-    private int type;
-    private int id;
-    private String name;
+    private int category_type;
+    private int category_id;
+    private String category_name;
 
-    public int getType() {
-        return type;
+    public int getCategory_type() {
+        return category_type;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setCategory_type(int category_type) {
+        this.category_type = category_type;
     }
 
-    public int getId() {
-        return id;
+    public int getCategory_id() {
+        return category_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategory_name() {
+        return category_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 
     @Override
     public String toString() {
         return "NavigationBean{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", id=" + id +
+                "category_type=" + category_type +
+                ", category_id=" + category_id +
+                ", category_name='" + category_name + '\'' +
                 '}';
     }
 }

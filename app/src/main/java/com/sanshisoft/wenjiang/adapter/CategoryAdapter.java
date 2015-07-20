@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.sanshisoft.wenjiang.R;
+import com.sanshisoft.wenjiang.bean.NavigationBean;
 
 import java.util.List;
 
@@ -15,18 +16,18 @@ import java.util.List;
  * Created by chenleicpp on 2015/7/19.
  * 二级网站导航adapter
  */
-public class CategoryAdapter<T> extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter {
 
     private Context mCtx;
     private LayoutInflater mInflater;
-    private List<T> mListDatas;
+    private List<NavigationBean> mListDatas;
 
     public CategoryAdapter(Context context){
         this.mCtx = context;
         this.mInflater = LayoutInflater.from(mCtx);
     }
 
-    public void setList(List<T> list){
+    public void setList(List<NavigationBean> list){
         this.mListDatas = list;
     }
 
@@ -47,7 +48,7 @@ public class CategoryAdapter<T> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null){
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.item_child_category,parent,false);
@@ -56,6 +57,8 @@ public class CategoryAdapter<T> extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
+        NavigationBean navi = mListDatas.get(position);
+        holder.childCatogory.setText(navi.getCategory_name());
         return convertView;
     }
 

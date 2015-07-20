@@ -98,5 +98,6 @@
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.8" level="project" />
     <orderEntry type="library" exported="" name="KJFrameForAndroid_v2.223" level="project" />
+    <orderEntry type="module" module-name="pull" exported="" />
   </component>
 </module>

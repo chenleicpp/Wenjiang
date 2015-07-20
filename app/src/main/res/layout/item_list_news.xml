@@ -1,0 +1,35 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <ImageView
+        android:id="@+id/iv_item_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_dot"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/tv_item_news_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="博时中证淘金大数据100指数型证券投资基金博时中证淘金大数据100指数型证券投资基金"
+        android:singleLine="true"
+        android:layout_toRightOf="@+id/iv_item_dot"
+        android:layout_toLeftOf="@+id/tv_item_news_date"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_item_news_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="05-25"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

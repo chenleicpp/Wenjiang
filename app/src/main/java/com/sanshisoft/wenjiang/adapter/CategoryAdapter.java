@@ -1,14 +1,20 @@
 package com.sanshisoft.wenjiang.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.bean.NavigationBean;
+import com.sanshisoft.wenjiang.ui.NewsActivity;
 
 import java.util.List;
 
@@ -57,8 +63,20 @@ public class CategoryAdapter extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-        NavigationBean navi = mListDatas.get(position);
+        final NavigationBean navi = mListDatas.get(position);
         holder.childCatogory.setText(navi.getCategory_name());
+        holder.childCatogory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mCtx, NewsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(NewsActivity.NEWS_ID,navi.getCategory_id());
+                bundle.putInt(NewsActivity.NEWS_TYPE,navi.getCategory_type());
+                intent.putExtras(bundle);
+                mCtx.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

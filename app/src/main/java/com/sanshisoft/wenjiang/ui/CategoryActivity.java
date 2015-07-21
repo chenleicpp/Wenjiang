@@ -35,8 +35,8 @@ public class CategoryActivity extends BaseActivity {
 
     public static final int CATEGORY_TYPE_NYZX = 1;
     public static final int CATEGORY_TYPE_ZWFW = 2;
-    public static final int CATEGORY_TYPE_DJGZ = 3;
-    public static final int CATEGORY_TYPE_ZTZL = 4;
+    public static final int CATEGORY_TYPE_ZTZL = 3;
+    public static final int CATEGORY_TYPE_DJGZ = 4;
     public static final int CATEGORY_TYPE_XXNY = 5;
 
     @Bind(R.id.ib_titlebar_back)
@@ -128,6 +128,7 @@ public class CategoryActivity extends BaseActivity {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            hideWaitDialog();
             ToastUtils.quickToast(CategoryActivity.this, error.getMessage());
         }
     };

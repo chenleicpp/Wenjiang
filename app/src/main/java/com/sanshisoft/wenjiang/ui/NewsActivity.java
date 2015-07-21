@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,11 +19,15 @@ import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
 import com.sanshisoft.wenjiang.base.BaseTask;
+import com.sanshisoft.wenjiang.bean.NewsBean;
+import com.sanshisoft.wenjiang.bean.NewsList;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -46,8 +51,10 @@ public class NewsActivity extends BaseActivity {
 
     private static int currentNum = 1;
     private int categoryId;
+    private int categoryType;
 
     private ListView mListView;
+    private List<NewsBean> mDatas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +75,7 @@ public class NewsActivity extends BaseActivity {
         Bundle b = getIntent().getExtras();
         if (b != null){
             categoryId = b.getInt(NEWS_ID);
+            categoryType = b.getInt(NEWS_TYPE);
         }
 
         lvNews.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
@@ -82,7 +90,25 @@ public class NewsActivity extends BaseActivity {
 
             }
         });
+        switch (categoryType) {
+            case CategoryActivity.CATEGORY_TYPE_NYZX:
+                tvNewsTitle.setText("农业资讯");
+                break;
+            case CategoryActivity.CATEGORY_TYPE_ZWFW:
+                tvNewsTitle.setText("政务服务");
+                break;
+            case CategoryActivity.CATEGORY_TYPE_DJGZ:
+                tvNewsTitle.setText("党建工作");
+                break;
+            case CategoryActivity.CATEGORY_TYPE_ZTZL:
+                tvNewsTitle.setText("专题专栏");
+                break;
+            case CategoryActivity.CATEGORY_TYPE_XXNY:
+                tvNewsTitle.setText("休闲农业");
+                break;
+        }
         mListView = lvNews.getRefreshableView();
+        mDatas = new ArrayList<>();
         getDatas(1);
     }
 
@@ -93,7 +119,7 @@ public class NewsActivity extends BaseActivity {
 
     private void getDatas(int page){
         showWaitDialog("正在加载...");
-        RemoteApi.getNavNewsList(mHandler, categoryId, currentNum, PAGE_SIZE);
+        RemoteApi.getNavNewsList(mHandler, categoryId, page, PAGE_SIZE);
     }
 
     private void getListNewsTask(byte[] body){
@@ -114,7 +140,7 @@ public class NewsActivity extends BaseActivity {
         }
     };
 
-    private class GetListNewsTask extends BaseTask<Void,String>{
+    private class GetListNewsTask extends BaseTask<Void,List<NewsBean>>{
 
         private byte[] datas;
 
@@ -124,10 +150,21 @@ public class NewsActivity extends BaseActivity {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<NewsBean> doInBackground(Void... params) {
             try {
                 String result = new String(datas,"gb2312");
+                Gson gson = new Gson();
                 Log.d("test",result);
+                if (result != null && !StringUtils.isEmpty(result)){
+                    NewsList news = gson.fromJson(result, NewsList.class);
+                    if (news != null && news.getData().size() > 0) {
+                        return news.getData();
+                    }else {
+                        return null;
+                    }
+                }else {
+                    error = "服务器错误，请重试！";
+                }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return null;
@@ -144,8 +181,10 @@ public class NewsActivity extends BaseActivity {
         }
 
         @Override
-        public void doStuffWithResult(String s) {
-
+        public void doStuffWithResult(List<NewsBean> datas) {
+            if (currentNum == 1){
+                mDatas.addAll(datas);
+            }
         }
     }
 }

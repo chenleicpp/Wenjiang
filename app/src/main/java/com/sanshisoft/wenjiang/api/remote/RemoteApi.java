@@ -32,4 +32,18 @@ public class RemoteApi {
         params.put("page_size",size);
         ApiHttpClient.post(url,params,handler);
     }
+
+    /**
+     * 获取四级新闻详情
+     * @param handler
+     * @param categoryId
+     * @param newId
+     */
+    public static void getNavNewsDetail(AsyncHttpResponseHandler handler,int categoryId,int newId){
+        String url = "getNavNewsDetail.asp";
+        RequestParams params = new RequestParams();
+        params.put("category_id",categoryId);
+        params.put("new_id",newId);
+        ApiHttpClient.post(url,params,handler);
+    }
 }

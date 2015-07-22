@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,7 +37,8 @@ import butterknife.Bind;
  * 三级新闻列表页
  */
 public class NewsActivity extends BaseActivity {
-    public static final String NEWS_ID = "id";
+    public static final String NEWS_ID = "new_id";
+    public static final String CATEGORY_ID = "category_id";
     public static final String NEWS_TYPE = "type";
     public static final String NEWS_CATEGORY = "category";
     @Bind(R.id.ib_titlebar_back)
@@ -78,7 +80,7 @@ public class NewsActivity extends BaseActivity {
 
         Bundle b = getIntent().getExtras();
         if (b != null){
-            categoryId = b.getInt(NEWS_ID);
+            categoryId = b.getInt(CATEGORY_ID);
             categoryType = b.getInt(NEWS_TYPE);
             categoryName = b.getString(NEWS_CATEGORY);
         }
@@ -101,6 +103,19 @@ public class NewsActivity extends BaseActivity {
         mDatas = new ArrayList<>();
         mAdapter = new NewsAdapter(this);
         getDatas(1);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(NewsActivity.this, NewsDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(NEWS_CATEGORY,categoryName);
+                bundle.putInt(NEWS_ID, mDatas.get(position).getId());
+                bundle.putInt(CATEGORY_ID,categoryId);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -172,7 +187,6 @@ public class NewsActivity extends BaseActivity {
 
         @Override
         public void doStuffWithResult(NewsList news) {
-            Log.d("@@@@",news.toString());
             List<NewsBean> datas = news.getData();
             if (news.getTotal_count() > 0) {
                 if (currentNum == 1) {

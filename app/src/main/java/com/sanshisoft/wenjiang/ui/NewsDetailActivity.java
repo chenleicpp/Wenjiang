@@ -1,5 +1,6 @@
 package com.sanshisoft.wenjiang.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,10 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ZoomButtonsController;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
+import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
+import com.sanshisoft.wenjiang.base.BaseTask;
 
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.kymjs.kjframe.utils.StringUtils;
+
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 
 import butterknife.Bind;
@@ -37,6 +47,10 @@ public class NewsDetailActivity extends BaseActivity {
 
     private ProgressDialog dialog;
 
+    private String categoryName;
+    private int newsId;
+    private int categoryId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +67,37 @@ public class NewsDetailActivity extends BaseActivity {
             }
         });
         setWebView();
-        webviewNewsDetail.loadUrl("http://testweb.timeerp.com/mobile/getNewsDetail.asp?new_id=201");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            categoryName = bundle.getString(NewsActivity.NEWS_CATEGORY);
+            newsId = bundle.getInt(NewsActivity.NEWS_ID);
+            categoryId = bundle.getInt(NewsActivity.CATEGORY_ID);
+        }
+        tvNewsTitle.setText(categoryName);
+        RemoteApi.getNavNewsDetail(mHandler,categoryId,newsId);
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_newsdetail;
+    }
+
+    private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            getNewsDetailTask(responseBody);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            hideWaitDialog();
+            ToastUtils.quickToast(NewsDetailActivity.this, error.getMessage());
+        }
+    };
+
+    private void getNewsDetailTask(byte[] datas){
+        GetDetailTask task = new GetDetailTask(this,"正在加载...",datas);
+        task.execute();
     }
 
     private void setWebView() {
@@ -151,5 +190,53 @@ public class NewsDetailActivity extends BaseActivity {
     }
     private int getAndroidSdkVersionCode(){
         return android.os.Build.VERSION.SDK_INT;
+    }
+
+    private class GetDetailTask extends BaseTask<Void,String>{
+
+        private byte[] datas;
+
+        public GetDetailTask(Activity activity, String message,byte[] datas) {
+            super(activity, message);
+            this.datas = datas;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                String result = new String(datas,"gb2312");
+                return result;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public void doStuffWithResult(String str) {
+            if (str != null && !StringUtils.isEmpty(str)){
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(str);
+                    int result_code = obj.getInt("result_code");
+                    if (result_code == 1){
+                        String url = obj.getString("new_url");
+                        webviewNewsDetail.loadUrl(url);
+                    }else{
+                        ToastUtils.quickToast(NewsDetailActivity.this,"获取新闻详情失败，请重试！");
+                        NewsDetailActivity.this.finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected void doError() {
+            if (error != null && !StringUtils.isEmpty(error)){
+                ToastUtils.quickToast(NewsDetailActivity.this,error);
+            }
+        }
     }
 }

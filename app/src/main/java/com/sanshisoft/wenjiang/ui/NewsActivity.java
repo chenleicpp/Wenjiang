@@ -172,16 +172,22 @@ public class NewsActivity extends BaseActivity {
 
         @Override
         public void doStuffWithResult(NewsList news) {
+            Log.d("@@@@",news.toString());
             List<NewsBean> datas = news.getData();
-            if (currentNum == 1){
-                mDatas.addAll(datas);
-                mAdapter.setList(mDatas);
-                mListView.setAdapter(mAdapter);
-            }else if(currentNum <= totalPage){
-                mDatas.addAll(datas);
-                mAdapter.setList(mDatas);
-            }else if(currentNum > totalPage){
-                ToastUtils.quickToast(NewsActivity.this, "最后一页，尚无更多新闻");
+            if (news.getTotal_count() > 0) {
+                if (currentNum == 1) {
+                    mDatas.addAll(datas);
+                    mAdapter.setList(mDatas);
+                    mListView.setAdapter(mAdapter);
+                } else if (currentNum <= totalPage) {
+                    mDatas.addAll(datas);
+                    mAdapter.setList(mDatas);
+                } else if (currentNum > totalPage) {
+                    ToastUtils.quickToast(NewsActivity.this, "最后一页，尚无更多新闻");
+                }
+            }else{
+                finish();
+                ToastUtils.quickToast(NewsActivity.this, "尚无新闻，请稍后重试！");
             }
             lvNews.onRefreshComplete();
             hideWaitDialog();

@@ -2,8 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/item_dot"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/tv_item_news_title"

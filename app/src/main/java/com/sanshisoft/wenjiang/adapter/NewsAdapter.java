@@ -14,6 +14,7 @@ import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.bean.NavigationBean;
 import com.sanshisoft.wenjiang.bean.NewsBean;
 import com.sanshisoft.wenjiang.ui.NewsActivity;
+import com.sanshisoft.wenjiang.utils.CommenUtils;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class NewsAdapter extends BaseAdapter {
         }
         final NewsBean nb = mDatas.get(position);
         holder.tvTitle.setText(nb.getTitle());
-
+        holder.tvDate.setText(CommenUtils.parseDate(nb.getDate()));
         return convertView;
     }
 

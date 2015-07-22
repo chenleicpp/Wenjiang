@@ -73,6 +73,7 @@ public class CategoryAdapter extends BaseAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putInt(NewsActivity.NEWS_ID,navi.getCategory_id());
                 bundle.putInt(NewsActivity.NEWS_TYPE,navi.getCategory_type());
+                bundle.putString(NewsActivity.NEWS_CATEGORY,navi.getCategory_name());
                 intent.putExtras(bundle);
                 mCtx.startActivity(intent);
             }

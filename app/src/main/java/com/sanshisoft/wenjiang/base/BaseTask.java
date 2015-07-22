@@ -13,7 +13,7 @@ public abstract class BaseTask<Input,Result> extends AsyncTask<Input,Void,Result
 
     protected Activity mActivity;
     protected ProgressDialog mProgressDialog;
-    private boolean isShow = true;
+    private boolean isShow = false;
     protected String error;
 
     public BaseTask(Activity activity,String message){

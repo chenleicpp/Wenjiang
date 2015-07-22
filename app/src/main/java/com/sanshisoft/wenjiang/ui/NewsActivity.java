@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -16,6 +15,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
+import com.sanshisoft.wenjiang.adapter.NewsAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
 import com.sanshisoft.wenjiang.base.BaseTask;
@@ -38,6 +38,7 @@ import butterknife.Bind;
 public class NewsActivity extends BaseActivity {
     public static final String NEWS_ID = "id";
     public static final String NEWS_TYPE = "type";
+    public static final String NEWS_CATEGORY = "category";
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
     @Bind(R.id.ib_titlebar_category)
@@ -47,14 +48,17 @@ public class NewsActivity extends BaseActivity {
     @Bind(R.id.lv_news)
     PullToRefreshListView lvNews;
 
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 15;
 
-    private static int currentNum = 1;
+    private int currentNum = 1;
     private int categoryId;
     private int categoryType;
+    private String categoryName;
 
     private ListView mListView;
     private List<NewsBean> mDatas;
+    private NewsAdapter mAdapter;
+    private int totalPage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,7 @@ public class NewsActivity extends BaseActivity {
         if (b != null){
             categoryId = b.getInt(NEWS_ID);
             categoryType = b.getInt(NEWS_TYPE);
+            categoryName = b.getString(NEWS_CATEGORY);
         }
 
         lvNews.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
@@ -87,28 +92,14 @@ public class NewsActivity extends BaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                currentNum++;
+                getDatas(currentNum);
             }
         });
-        switch (categoryType) {
-            case CategoryActivity.CATEGORY_TYPE_NYZX:
-                tvNewsTitle.setText("农业资讯");
-                break;
-            case CategoryActivity.CATEGORY_TYPE_ZWFW:
-                tvNewsTitle.setText("政务服务");
-                break;
-            case CategoryActivity.CATEGORY_TYPE_DJGZ:
-                tvNewsTitle.setText("党建工作");
-                break;
-            case CategoryActivity.CATEGORY_TYPE_ZTZL:
-                tvNewsTitle.setText("专题专栏");
-                break;
-            case CategoryActivity.CATEGORY_TYPE_XXNY:
-                tvNewsTitle.setText("休闲农业");
-                break;
-        }
+        tvNewsTitle.setText(categoryName);
         mListView = lvNews.getRefreshableView();
         mDatas = new ArrayList<>();
+        mAdapter = new NewsAdapter(this);
         getDatas(1);
     }
 
@@ -140,7 +131,7 @@ public class NewsActivity extends BaseActivity {
         }
     };
 
-    private class GetListNewsTask extends BaseTask<Void,List<NewsBean>>{
+    private class GetListNewsTask extends BaseTask<Void,NewsList>{
 
         private byte[] datas;
 
@@ -150,17 +141,16 @@ public class NewsActivity extends BaseActivity {
         }
 
         @Override
-        protected List<NewsBean> doInBackground(Void... params) {
+        protected NewsList doInBackground(Void... params) {
             try {
                 String result = new String(datas,"gb2312");
                 Gson gson = new Gson();
                 Log.d("test",result);
                 if (result != null && !StringUtils.isEmpty(result)){
                     NewsList news = gson.fromJson(result, NewsList.class);
-                    if (news != null && news.getData().size() > 0) {
-                        return news.getData();
-                    }else {
-                        return null;
+                    updateTotalPage(news.getTotal_count());
+                    if (news != null) {
+                        return news;
                     }
                 }else {
                     error = "服务器错误，请重试！";
@@ -176,15 +166,33 @@ public class NewsActivity extends BaseActivity {
         protected void doError() {
             if (error != null && !StringUtils.isEmpty(error)){
                 hideWaitDialog();
-                ToastUtils.quickToast(NewsActivity.this,error);
+                ToastUtils.quickToast(NewsActivity.this, error);
             }
         }
 
         @Override
-        public void doStuffWithResult(List<NewsBean> datas) {
+        public void doStuffWithResult(NewsList news) {
+            List<NewsBean> datas = news.getData();
             if (currentNum == 1){
                 mDatas.addAll(datas);
+                mAdapter.setList(mDatas);
+                mListView.setAdapter(mAdapter);
+            }else if(currentNum <= totalPage){
+                mDatas.addAll(datas);
+                mAdapter.setList(mDatas);
+            }else if(currentNum > totalPage){
+                ToastUtils.quickToast(NewsActivity.this, "最后一页，尚无更多新闻");
             }
+            lvNews.onRefreshComplete();
+            hideWaitDialog();
+        }
+    }
+
+    private void updateTotalPage(int total) {
+        if (total % PAGE_SIZE == 0){
+            totalPage = total / PAGE_SIZE;
+        }else {
+            totalPage = (total / PAGE_SIZE) + 1;
         }
     }
 }

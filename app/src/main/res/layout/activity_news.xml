@@ -33,10 +33,9 @@
             android:divider="#19000000"
             android:dividerHeight="1dp"
             android:fadingEdge="none"
-            android:fastScrollEnabled="false"
+            android:scrollbars="none"
             android:footerDividersEnabled="false"
             android:headerDividersEnabled="false"
-            android:smoothScrollbar="true"
             tools:listitem="@layout/item_list_news"/>
     </LinearLayout>
 

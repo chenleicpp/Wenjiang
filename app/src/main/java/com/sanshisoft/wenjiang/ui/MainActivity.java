@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @OnClick({R.id.ll_middle_wjny_area,R.id.ll_middle_gsgg_area,R.id.ll_middle_xwlb_area,R.id.tv_middle_njfw_area})
+    @OnClick({R.id.ll_middle_wjny_area,R.id.ll_middle_gsgg_area,R.id.ll_middle_xwlb_area,R.id.tv_middle_njfw_area,R.id.ll_middle_djgz_area,R.id.ll_middle_ztzl_area,R.id.ll_middle_zwfw_area})
     public void homeAreaClicked(View view){
         switch (view.getId()){
             case R.id.ll_middle_wjny_area:
@@ -136,12 +136,35 @@ public class MainActivity extends BaseActivity {
                 //农业服务
                 startToNewsActivity(16,3,"农技服务");
                 break;
+            case R.id.ll_middle_djgz_area:
+                //党建工作
+                startToNewsExActivity(4,4,"党建工作");
+                break;
+            case R.id.ll_middle_ztzl_area:
+                //专题专栏
+                startToNewsExActivity(3,3,"专题专栏");
+                break;
+            case R.id.ll_middle_zwfw_area:
+                //政务服务
+                startToNewsExActivity(2,2,"政务服务");
+                break;
         }
     }
 
     private void startToNewsActivity(int category_id,int news_type,String news_category){
         Intent intent = new Intent();
         intent.setClass(this,NewsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(NewsActivity.CATEGORY_ID,category_id);
+        bundle.putInt(NewsActivity.NEWS_TYPE,news_type);
+        bundle.putString(NewsActivity.NEWS_CATEGORY,news_category);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    private void startToNewsExActivity(int category_id,int news_type,String news_category){
+        Intent intent = new Intent();
+        intent.setClass(this,NewsExActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(NewsActivity.CATEGORY_ID,category_id);
         bundle.putInt(NewsActivity.NEWS_TYPE,news_type);

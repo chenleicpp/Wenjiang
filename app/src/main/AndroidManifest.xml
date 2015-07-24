@@ -58,6 +58,11 @@
             android:label="@string/app_name" >
 
         </activity>
+        <activity
+            android:name=".ui.NewsExActivity"
+            android:label="@string/app_name" >
+
+        </activity>
     </application>
 
 </manifest>

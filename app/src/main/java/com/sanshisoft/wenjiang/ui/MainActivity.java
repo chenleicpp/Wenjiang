@@ -1,6 +1,7 @@
 package com.sanshisoft.wenjiang.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.base.BaseActivity;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
@@ -84,5 +86,34 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick({R.id.ll_footer_sina_area,R.id.ll_footer_tengxun_area,R.id.ll_footer_weixin_area,R.id.ll_footer_tel_area })
+    public void footerClicked(View view){
+        switch (view.getId()){
+            case R.id.ll_footer_sina_area:
+                startToFooterActivity(FooterActivity.TYPE_SINA);
+                break;
+            case R.id.ll_footer_tengxun_area:
+                startToFooterActivity(FooterActivity.TYPE_TENGXUN);
+                break;
+            case R.id.ll_footer_weixin_area:
+                startToFooterActivity(FooterActivity.TYPE_WEIXIN);
+                break;
+            case R.id.ll_footer_tel_area:
+                Uri uri = Uri.parse("tel:10086");
+                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    private void startToFooterActivity(int type){
+        Intent intent = new Intent();
+        intent.setClass(this, FooterActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(FooterActivity.TYPE,type);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

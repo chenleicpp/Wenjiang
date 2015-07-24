@@ -53,6 +53,11 @@
             android:label="@string/app_name" >
 
         </activity>
+        <activity
+            android:name=".ui.FooterActivity"
+            android:label="@string/app_name" >
+
+        </activity>
     </application>
 
 </manifest>

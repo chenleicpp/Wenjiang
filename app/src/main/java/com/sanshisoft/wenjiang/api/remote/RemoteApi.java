@@ -46,4 +46,36 @@ public class RemoteApi {
         params.put("new_id",newId);
         ApiHttpClient.post(url,params,handler);
     }
+
+    /**
+     * 首页图片新闻列表页（温江特产、休闲农业）
+     * @param hanlder
+     * @param type 大类id和小类id
+     * @param num
+     * @param size
+     */
+    public static void getWjtcList(AsyncHttpResponseHandler hanlder,int type,int num,int size){
+        String url = "getWjtcList.asp";
+        RequestParams params = new RequestParams();
+        params.put("type",type);
+        params.put("page_num",num);
+        params.put("page_size",size);
+        ApiHttpClient.post(url,params,hanlder);
+    }
+
+    /**
+     * 首页文字新闻集合列表页（政务服务、专题专栏、党建工作）
+     * @param handler
+     * @param type
+     * @param num
+     * @param size
+     */
+    public static void getDjgzList(AsyncHttpResponseHandler handler,int type,int num,int size){
+        String url = "getDjgzList.asp";
+        RequestParams params = new RequestParams();
+        params.put("type",type);
+        params.put("page_num",num);
+        params.put("page_size",size);
+        ApiHttpClient.post(url,params,handler);
+    }
 }

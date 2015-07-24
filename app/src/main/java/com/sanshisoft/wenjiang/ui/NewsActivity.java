@@ -142,6 +142,7 @@ public class NewsActivity extends BaseActivity {
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             hideWaitDialog();
+            lvNews.onRefreshComplete();
             ToastUtils.quickToast(NewsActivity.this, error.getMessage());
         }
     };

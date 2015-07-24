@@ -116,4 +116,37 @@ public class MainActivity extends BaseActivity {
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
+    @OnClick({R.id.ll_middle_wjny_area,R.id.ll_middle_gsgg_area,R.id.ll_middle_xwlb_area,R.id.tv_middle_njfw_area})
+    public void homeAreaClicked(View view){
+        switch (view.getId()){
+            case R.id.ll_middle_wjny_area:
+                //温江农业
+                startToNewsActivity(9,1,"温江农业");
+                break;
+            case R.id.ll_middle_gsgg_area:
+                startToNewsActivity(7,1,"公示公告");
+                //公示公告
+                break;
+            case R.id.ll_middle_xwlb_area:
+                //新闻联播
+                startToNewsActivity(8,1,"新闻联播");
+                break;
+            case R.id.tv_middle_njfw_area:
+                //农业服务
+                startToNewsActivity(16,3,"农技服务");
+                break;
+        }
+    }
+
+    private void startToNewsActivity(int category_id,int news_type,String news_category){
+        Intent intent = new Intent();
+        intent.setClass(this,NewsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(NewsActivity.CATEGORY_ID,category_id);
+        bundle.putInt(NewsActivity.NEWS_TYPE,news_type);
+        bundle.putString(NewsActivity.NEWS_CATEGORY,news_category);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

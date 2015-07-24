@@ -2,6 +2,7 @@ package com.sanshisoft.wenjiang.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -154,6 +155,7 @@ public class CategoryActivity extends BaseActivity {
                 Gson gson = new Gson();
                 if (result != null && !StringUtils.isEmpty(result)) {
                     NavigationList nl = gson.fromJson(result, NavigationList.class);
+                    Log.d("test",nl.toString());
                     if (nl != null) {
                         List<NavigationBean> datas = nl.getData();
                         if (datas.size() > 0) {

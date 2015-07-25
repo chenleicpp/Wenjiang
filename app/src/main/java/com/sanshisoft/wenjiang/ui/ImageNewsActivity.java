@@ -6,25 +6,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
-import com.sanshisoft.wenjiang.adapter.NewsAdapter;
-import com.sanshisoft.wenjiang.adapter.NewsExAdapter;
+import com.sanshisoft.wenjiang.adapter.ImageNewsAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
 import com.sanshisoft.wenjiang.base.BaseTask;
-import com.sanshisoft.wenjiang.bean.NewsBean;
-import com.sanshisoft.wenjiang.bean.NewsExBean;
-import com.sanshisoft.wenjiang.bean.NewsExList;
-import com.sanshisoft.wenjiang.bean.NewsList;
+import com.sanshisoft.wenjiang.bean.ImageBean;
+import com.sanshisoft.wenjiang.bean.ImageList;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.StringUtils;
@@ -36,38 +33,34 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by Administrator on 2015/7/20.
- * 三级新闻列表页
+ * Created by chenleicpp on 2015/7/24.
  */
-public class NewsExActivity extends BaseActivity {
-    public static final String NEWS_ID = "new_id";
+public class ImageNewsActivity extends BaseActivity {
+
+    public static final String CATEGORY_NAME = "category_name";
     public static final String CATEGORY_ID = "category_id";
-    public static final String NEWS_TYPE = "type";
-    public static final String NEWS_CATEGORY = "category";
+
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
     @Bind(R.id.ib_titlebar_category)
     ImageView ibTitlebarCategory;
-    @Bind(R.id.tv_news_ex_title)
+    @Bind(R.id.tv_news_title)
     TextView tvNewsTitle;
-    @Bind(R.id.lv_news_ex)
-    PullToRefreshListView lvNews;
+    @Bind(R.id.gv_news)
+    PullToRefreshGridView gvNews;
 
-    private static final int PAGE_SIZE = 15;
-
-    private int currentNum = 1;
     private int categoryId;
-    private int categoryType;
     private String categoryName;
-
-    private ListView mListView;
-    private List<NewsExBean> mDatas;
-    private NewsExAdapter mAdapter;
+    private GridView mGridView;
+    private List<ImageBean> mDatas;
+    private ImageNewsAdapter mAdapter;
     private int totalPage;
+    private static final int PAGE_SIZE = 15;
+    private int currentNum = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ibTitlebarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,44 +70,42 @@ public class NewsExActivity extends BaseActivity {
         ibTitlebarCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(NewsExActivity.this, CategoryActivity.class));
+                startActivity(new Intent(ImageNewsActivity.this, CategoryActivity.class));
             }
         });
-
-        Bundle b = getIntent().getExtras();
-        if (b != null){
-            categoryId = b.getInt(CATEGORY_ID);
-            categoryType = b.getInt(NEWS_TYPE);
-            categoryName = b.getString(NEWS_CATEGORY);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            categoryId = bundle.getInt(CATEGORY_ID);
+            categoryName = bundle.getString(CATEGORY_NAME);
         }
 
-        lvNews.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        lvNews.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        gvNews.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        gvNews.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
 
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 currentNum++;
                 getDatas(currentNum);
             }
         });
         tvNewsTitle.setText(categoryName);
-        mListView = lvNews.getRefreshableView();
+        mGridView = gvNews.getRefreshableView();
         mDatas = new ArrayList<>();
-        mAdapter = new NewsExAdapter(this);
+        mAdapter = new ImageNewsAdapter(this);
         getDatas(1);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.setClass(NewsExActivity.this, NewsDetailActivity.class);
+                intent.setClass(ImageNewsActivity.this, NewsDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(NEWS_CATEGORY,categoryName);
-                bundle.putInt(NEWS_ID, mDatas.get(position-1).getNew_id());
-                bundle.putInt(CATEGORY_ID,categoryId);
+                bundle.putString(NewsActivity.NEWS_CATEGORY, categoryName);
+                bundle.putInt(NewsActivity.NEWS_ID, mDatas.get(position - 1).getNew_id());
+                bundle.putInt(NewsActivity.CATEGORY_ID, categoryId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -123,12 +114,12 @@ public class NewsExActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_news_ex;
+        return R.layout.activity_image_news;
     }
 
     private void getDatas(int page){
         showWaitDialog("正在加载...");
-        RemoteApi.getDjgzList(mHandler, categoryId, page, PAGE_SIZE);
+        RemoteApi.getWjtcList(mHandler,categoryId,page,PAGE_SIZE);
     }
 
     private void getListNewsTask(byte[] body){
@@ -139,18 +130,18 @@ public class NewsExActivity extends BaseActivity {
     private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-           getListNewsTask(responseBody);
+            getListNewsTask(responseBody);
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             hideWaitDialog();
-            lvNews.onRefreshComplete();
-            ToastUtils.quickToast(NewsExActivity.this, error.getMessage());
+            gvNews.onRefreshComplete();
+            ToastUtils.quickToast(ImageNewsActivity.this, error.getMessage());
         }
     };
 
-    private class GetListNewsTask extends BaseTask<Void,NewsExList>{
+    private class GetListNewsTask extends BaseTask<Void,ImageList> {
 
         private byte[] datas;
 
@@ -160,13 +151,13 @@ public class NewsExActivity extends BaseActivity {
         }
 
         @Override
-        protected NewsExList doInBackground(Void... params) {
+        protected ImageList doInBackground(Void... params) {
             try {
                 String result = new String(datas,"gb2312");
                 Gson gson = new Gson();
-                Log.d("test",result);
+                Log.i("test", result);
                 if (result != null && !StringUtils.isEmpty(result)){
-                    NewsExList news = gson.fromJson(result, NewsExList.class);
+                    ImageList news = gson.fromJson(result, ImageList.class);
                     updateTotalPage(news.getTotal_count());
                     if (news != null) {
                         return news;
@@ -185,29 +176,29 @@ public class NewsExActivity extends BaseActivity {
         protected void doError() {
             if (error != null && !StringUtils.isEmpty(error)){
                 hideWaitDialog();
-                ToastUtils.quickToast(NewsExActivity.this, error);
+                ToastUtils.quickToast(ImageNewsActivity.this, error);
             }
         }
 
         @Override
-        public void doStuffWithResult(NewsExList news) {
-            List<NewsExBean> datas = news.getData();
+        public void doStuffWithResult(ImageList news) {
+            List<ImageBean> datas = news.getData();
             if (news.getTotal_count() > 0) {
                 if (currentNum == 1) {
                     mDatas.addAll(datas);
                     mAdapter.setList(mDatas);
-                    mListView.setAdapter(mAdapter);
+                    mGridView.setAdapter(mAdapter);
                 } else if (currentNum <= totalPage) {
                     mDatas.addAll(datas);
                     mAdapter.setList(mDatas);
                 } else if (currentNum > totalPage) {
-                    ToastUtils.quickToast(NewsExActivity.this, "最后一页，尚无更多新闻");
+                    ToastUtils.quickToast(ImageNewsActivity.this, "最后一页，尚无更多新闻");
                 }
             }else{
                 finish();
-                ToastUtils.quickToast(NewsExActivity.this, "尚无新闻，请稍后重试！");
+                ToastUtils.quickToast(ImageNewsActivity.this, "尚无新闻，请稍后重试！");
             }
-            lvNews.onRefreshComplete();
+            gvNews.onRefreshComplete();
             hideWaitDialog();
         }
     }

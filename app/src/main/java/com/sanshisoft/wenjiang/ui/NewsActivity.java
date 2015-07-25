@@ -110,7 +110,7 @@ public class NewsActivity extends BaseActivity {
                 intent.setClass(NewsActivity.this, NewsDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(NEWS_CATEGORY,categoryName);
-                bundle.putInt(NEWS_ID, mDatas.get(position).getId());
+                bundle.putInt(NEWS_ID, mDatas.get(position-1).getId());
                 bundle.putInt(CATEGORY_ID,categoryId);
                 intent.putExtras(bundle);
                 startActivity(intent);

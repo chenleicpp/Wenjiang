@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.tv_middle_xxny_area:
                 //休闲农业
-                startToImageNewsActivity(5,"休闲农业");
+                startToImageNewsActivity(26,"休闲农业");
                 break;
         }
     }

@@ -16,8 +16,9 @@ import java.util.Locale;
  * 网络请求工具类
  */
 public class ApiHttpClient {
-    public final static String HOST = "testweb.timeerp.com";
-    private static String API_URL = "http://testweb.timeerp.com/mobile/%s";
+    public final static String HOST = "web20150729.gotoip3.com";
+    private static String API_URL = "http://web20150729.gotoip3.com/mobile/%s";
+    //private static String API_URL = "http://testweb.timeerp.com/mobile/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";

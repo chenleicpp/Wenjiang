@@ -101,9 +101,10 @@ public class MainActivity extends BaseActivity {
                 startToFooterActivity(FooterActivity.TYPE_WEIXIN);
                 break;
             case R.id.ll_footer_tel_area:
-                Uri uri = Uri.parse("tel:028-82727971");
-                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
-                startActivity(intent);
+//                Uri uri = Uri.parse("tel:028-82727971");
+//                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+//                startActivity(intent);
+                startToFooterActivity(FooterActivity.TYPE_CONTACT);
                 break;
         }
     }

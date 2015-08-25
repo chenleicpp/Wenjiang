@@ -31,8 +31,10 @@ public class FooterActivity extends BaseActivity {
     public static final int TYPE_SINA = 1;
     public static final int TYPE_TENGXUN = 2;
     public static final int TYPE_WEIXIN = 3;
+    public static final int TYPE_CONTACT = 4;
     private static final String SINA_URL = "http://weibo.com/wjncfzj";
     private static final String TENGXUN_URL = "http://t.qq.com/wjqncfzj";
+    private static final String CONTACT_URL = "http://www.wjagri.cn/show_app_lxwm.asp?showid=2";
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
     @Bind(R.id.ib_titlebar_category)
@@ -64,6 +66,10 @@ public class FooterActivity extends BaseActivity {
             webviewFooter.setVisibility(View.VISIBLE);
             ivFooter.setVisibility(View.GONE);
             webviewFooter.loadUrl(TENGXUN_URL);
+        }else if (type == TYPE_CONTACT){
+            webviewFooter.setVisibility(View.VISIBLE);
+            ivFooter.setVisibility(View.GONE);
+            webviewFooter.loadUrl(CONTACT_URL);
         }
 
         ibTitlebarBack.setOnClickListener(new View.OnClickListener() {

@@ -83,7 +83,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/ll_middle_xwlb_area"
+                android:id="@+id/ll_middle_nyzx_area"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
@@ -97,13 +97,13 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/ic_home_xwlb"/>
+                    android:src="@drawable/ic_home_nyzx"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="新闻联播"
+                    android:text="农业资讯"
                     android:textColor="@android:color/white"/>
 
             </LinearLayout>

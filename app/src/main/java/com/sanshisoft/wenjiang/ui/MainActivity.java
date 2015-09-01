@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
     LinearLayout llMiddleWjnyArea;
     @Bind(R.id.ll_middle_gsgg_area)
     LinearLayout llMiddleGsggArea;
-    @Bind(R.id.ll_middle_xwlb_area)
+    @Bind(R.id.ll_middle_nyzx_area)
     LinearLayout llMiddleXwlbArea;
     @Bind(R.id.ll_middle_zwfw_area)
     LinearLayout llMiddleZwfwArea;
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @OnClick({R.id.ll_middle_wjny_area, R.id.ll_middle_gsgg_area, R.id.ll_middle_xwlb_area, R.id.tv_middle_njfw_area,
+    @OnClick({R.id.ll_middle_wjny_area, R.id.ll_middle_gsgg_area, R.id.ll_middle_nyzx_area, R.id.tv_middle_njfw_area,
             R.id.ll_middle_djgz_area, R.id.ll_middle_ztzl_area, R.id.ll_middle_zwfw_area,R.id.tv_middle_wjtc_area,R.id.tv_middle_xxny_area})
     public void homeAreaClicked(View view) {
         switch (view.getId()) {
@@ -130,9 +130,9 @@ public class MainActivity extends BaseActivity {
                 startToNewsActivity(7, 1, "公示公告");
                 //公示公告
                 break;
-            case R.id.ll_middle_xwlb_area:
-                //新闻联播
-                startToNewsActivity(8, 1, "新闻联播");
+            case R.id.ll_middle_nyzx_area:
+                //农业资讯
+                startToNewsActivity(8, 1, "农业资讯");
                 break;
             case R.id.tv_middle_njfw_area:
                 //农业服务

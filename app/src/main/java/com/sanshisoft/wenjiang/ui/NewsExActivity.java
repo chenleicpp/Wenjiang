@@ -1,6 +1,5 @@
 package com.sanshisoft.wenjiang.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +15,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
-import com.sanshisoft.wenjiang.adapter.NewsAdapter;
 import com.sanshisoft.wenjiang.adapter.NewsExAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
-import com.sanshisoft.wenjiang.base.BaseTask;
-import com.sanshisoft.wenjiang.bean.NewsBean;
 import com.sanshisoft.wenjiang.bean.NewsExBean;
 import com.sanshisoft.wenjiang.bean.NewsExList;
-import com.sanshisoft.wenjiang.bean.NewsList;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.StringUtils;
@@ -127,19 +122,15 @@ public class NewsExActivity extends BaseActivity {
     }
 
     private void getDatas(int page){
-        showWaitDialog("正在加载...");
+        if (page == 1)
+            showWaitDialog("正在加载...");
         RemoteApi.getDjgzList(mHandler, categoryId, page, PAGE_SIZE);
-    }
-
-    private void getListNewsTask(byte[] body){
-        GetListNewsTask task = new GetListNewsTask(this,"正在加载...",body);
-        task.execute();
     }
 
     private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-           getListNewsTask(responseBody);
+            doResponseData(responseBody);
         }
 
         @Override
@@ -150,65 +141,40 @@ public class NewsExActivity extends BaseActivity {
         }
     };
 
-    private class GetListNewsTask extends BaseTask<Void,NewsExList>{
-
-        private byte[] datas;
-
-        public GetListNewsTask(Activity activity, String message,byte[] datas) {
-            super(activity, message);
-            this.datas = datas;
-        }
-
-        @Override
-        protected NewsExList doInBackground(Void... params) {
-            try {
-                String result = new String(datas,"gb2312");
-                Gson gson = new Gson();
-                Log.d("test",result);
-                if (result != null && !StringUtils.isEmpty(result)){
-                    NewsExList news = gson.fromJson(result, NewsExList.class);
-                    updateTotalPage(news.getTotal_count());
-                    if (news != null) {
-                        return news;
+    private void doResponseData(byte[] datas){
+        try {
+            String result = new String(datas,"gb2312");
+            Gson gson = new Gson();
+            Log.d("test",result);
+            if (result != null && !StringUtils.isEmpty(result)){
+                NewsExList news = gson.fromJson(result, NewsExList.class);
+                updateTotalPage(news.getTotal_count());
+                if (news != null) {
+                    List<NewsExBean> newsData = news.getData();
+                    if (news.getTotal_count() > 0) {
+                        if (currentNum == 1) {
+                            mDatas.addAll(newsData);
+                            mAdapter.setList(mDatas);
+                            mListView.setAdapter(mAdapter);
+                            hideWaitDialog();
+                        } else if (currentNum <= totalPage) {
+                            mDatas.addAll(newsData);
+                            mAdapter.setList(mDatas);
+                        } else if (currentNum > totalPage) {
+                            ToastUtils.quickToast(NewsExActivity.this, "最后一页，尚无更多新闻");
+                        }
+                    }else{
+                        finish();
+                        ToastUtils.quickToast(NewsExActivity.this, "尚无新闻，请稍后重试！");
                     }
-                }else {
-                    error = "服务器错误，请重试！";
+                    lvNews.onRefreshComplete();
                 }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return null;
+            }else {
+                ToastUtils.quickToast(this,"服务器错误，请重试！");
             }
-            return null;
-        }
-
-        @Override
-        protected void doError() {
-            if (error != null && !StringUtils.isEmpty(error)){
-                hideWaitDialog();
-                ToastUtils.quickToast(NewsExActivity.this, error);
-            }
-        }
-
-        @Override
-        public void doStuffWithResult(NewsExList news) {
-            List<NewsExBean> datas = news.getData();
-            if (news.getTotal_count() > 0) {
-                if (currentNum == 1) {
-                    mDatas.addAll(datas);
-                    mAdapter.setList(mDatas);
-                    mListView.setAdapter(mAdapter);
-                } else if (currentNum <= totalPage) {
-                    mDatas.addAll(datas);
-                    mAdapter.setList(mDatas);
-                } else if (currentNum > totalPage) {
-                    ToastUtils.quickToast(NewsExActivity.this, "最后一页，尚无更多新闻");
-                }
-            }else{
-                finish();
-                ToastUtils.quickToast(NewsExActivity.this, "尚无新闻，请稍后重试！");
-            }
-            lvNews.onRefreshComplete();
-            hideWaitDialog();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            ToastUtils.quickToast(this, "服务器错误，请重试！");
         }
     }
 

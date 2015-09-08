@@ -52,6 +52,7 @@ public class NewsActivity extends BaseActivity {
 
     private int currentNum = 1;
     private int categoryId;
+    @Deprecated
     private int categoryType;
     private String categoryName;
 

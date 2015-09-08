@@ -161,6 +161,12 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     *
+     * @param category_id
+     * @param news_type 父类别id，暂时无用
+     * @param news_category
+     */
     private void startToNewsActivity(int category_id, int news_type, String news_category) {
         Intent intent = new Intent();
         intent.setClass(this, NewsActivity.class);
@@ -172,6 +178,12 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /**
+     *
+     * @param category_id
+     * @param news_type 父类别id，暂时无用
+     * @param news_category
+     */
     private void startToNewsExActivity(int category_id, int news_type, String news_category) {
         Intent intent = new Intent();
         intent.setClass(this, NewsExActivity.class);

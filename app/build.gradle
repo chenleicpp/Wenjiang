@@ -29,4 +29,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile project(':pull')
     compile files('libs/universal-image-loader-1.9.1.jar')
+    compile 'com.android.support:design:22.2.0'
 }

@@ -65,6 +65,7 @@ public class CategoryAdapter extends BaseAdapter {
         }
         final NavigationBean navi = mListDatas.get(position);
         holder.childCatogory.setText(navi.getCategory_name());
+        holder.childCatogory.setTextColor(mCtx.getResources().getColor(R.color.primary_text));
         holder.childCatogory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

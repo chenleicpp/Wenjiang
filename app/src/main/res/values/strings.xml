@@ -3,6 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    
+    <string name="action_navi">导航</string>
     <string name="globe_error_msg">出现错误，请重试！</string>
 </resources>

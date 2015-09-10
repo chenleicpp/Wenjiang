@@ -123,8 +123,6 @@ public class NewsImageFragment extends BaseFragment {
     }
 
     private void getDatas(int page){
-        if (page == 1)
-            showWaitDialog(R.string.loading);
         RemoteApi.getWjtcList(mHandler, mCategoryId, page, PAGE_SIZE);
     }
 
@@ -143,7 +141,6 @@ public class NewsImageFragment extends BaseFragment {
                             mDatas.addAll(imageDatas);
                             mAdapter.setList(mDatas);
                             mGridView.setAdapter(mAdapter);
-                            hideWaitDialog();
                         } else if (currentNum <= totalPage) {
                             mDatas.addAll(imageDatas);
                             mAdapter.setList(mDatas);
@@ -171,7 +168,6 @@ public class NewsImageFragment extends BaseFragment {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            hideWaitDialog();
             gvNews.onRefreshComplete();
             ToastUtils.quickToast(getActivity(), error.getMessage());
         }

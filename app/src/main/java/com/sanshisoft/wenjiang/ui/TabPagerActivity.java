@@ -74,6 +74,9 @@ public class TabPagerActivity extends BaseActivity {
         if (id == R.id.action_navi) {
             startActivity(new Intent(TabPagerActivity.this, CategoryActivity.class));
             return true;
+        }else if (id == android.R.id.home){
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.sanshisoft.wenjiang.common.DialogControl;
 import com.sanshisoft.wenjiang.utils.DialogHelp;
 
 import butterknife.ButterKnife;
@@ -11,7 +12,7 @@ import butterknife.ButterKnife;
 /**
  * Created by chenleicpp on 2015/7/19.
  */
-public class BaseActivity extends ActionBarActivity{
+public class BaseActivity extends ActionBarActivity implements DialogControl {
 
     private boolean _isVisible;
     private ProgressDialog _waitDialog;
@@ -69,5 +70,15 @@ public class BaseActivity extends ActionBarActivity{
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public ProgressDialog showWaitDialog() {
+        return showWaitDialog("正在加载...");
+    }
+
+    @Override
+    public ProgressDialog showWaitDialog(int resid) {
+        return showWaitDialog(getString(resid));
     }
 }

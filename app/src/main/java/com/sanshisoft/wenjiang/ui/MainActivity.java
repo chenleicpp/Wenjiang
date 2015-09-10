@@ -119,47 +119,97 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
+//    @OnClick({R.id.ll_middle_wjny_area, R.id.ll_middle_gsgg_area, R.id.ll_middle_nyzx_area, R.id.tv_middle_njfw_area,
+//            R.id.ll_middle_djgz_area, R.id.ll_middle_ztzl_area, R.id.ll_middle_zwfw_area,R.id.tv_middle_wjtc_area,R.id.tv_middle_xxny_area})
+//    public void homeAreaClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.ll_middle_wjny_area:
+//                //温江农业
+//                startToNewsActivity(9, 1, "温江农业");
+//                break;
+//            case R.id.ll_middle_gsgg_area:
+//                startToNewsActivity(7, 1, "公示公告");
+//                //公示公告
+//                break;
+//            case R.id.ll_middle_nyzx_area:
+//                //农业资讯
+//                startToNewsActivity(8, 1, "农业资讯");
+//                break;
+//            case R.id.tv_middle_njfw_area:
+//                //农业服务
+//                startToNewsActivity(16, 3, "农技服务");
+//                break;
+//            case R.id.ll_middle_djgz_area:
+//                //党建工作
+//                startToNewsExActivity(4, 4, "党建工作");
+//                break;
+//            case R.id.ll_middle_ztzl_area:
+//                //专题专栏
+//                startToNewsExActivity(3, 3, "专题专栏");
+//                break;
+//            case R.id.ll_middle_zwfw_area:
+//                //政务服务
+//                startToNewsExActivity(2, 2, "政务服务");
+//                break;
+//            case R.id.tv_middle_wjtc_area:
+//                //温江特产
+//                startToImageNewsActivity(27,"温江特产");
+//                break;
+//            case R.id.tv_middle_xxny_area:
+//                //休闲农业
+//                startToImageNewsActivity(26,"休闲农业");
+//                break;
+//        }
+//    }
+
     @OnClick({R.id.ll_middle_wjny_area, R.id.ll_middle_gsgg_area, R.id.ll_middle_nyzx_area, R.id.tv_middle_njfw_area,
             R.id.ll_middle_djgz_area, R.id.ll_middle_ztzl_area, R.id.ll_middle_zwfw_area,R.id.tv_middle_wjtc_area,R.id.tv_middle_xxny_area})
     public void homeAreaClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_middle_wjny_area:
                 //温江农业
-                startToNewsActivity(9, 1, "温江农业");
+                jump2TabPager(0);
                 break;
             case R.id.ll_middle_gsgg_area:
-                startToNewsActivity(7, 1, "公示公告");
+                jump2TabPager(1);
                 //公示公告
                 break;
             case R.id.ll_middle_nyzx_area:
                 //农业资讯
-                startToNewsActivity(8, 1, "农业资讯");
+                jump2TabPager(2);
                 break;
             case R.id.tv_middle_njfw_area:
                 //农业服务
-                startToNewsActivity(16, 3, "农技服务");
+                jump2TabPager(3);
                 break;
             case R.id.ll_middle_djgz_area:
                 //党建工作
-                startToNewsExActivity(4, 4, "党建工作");
+                jump2TabPager(4);
                 break;
             case R.id.ll_middle_ztzl_area:
                 //专题专栏
-                startToNewsExActivity(3, 3, "专题专栏");
+                jump2TabPager(5);
                 break;
             case R.id.ll_middle_zwfw_area:
                 //政务服务
-                startToNewsExActivity(2, 2, "政务服务");
+                jump2TabPager(6);
                 break;
             case R.id.tv_middle_wjtc_area:
                 //温江特产
-                startToImageNewsActivity(27,"温江特产");
+                jump2TabPager(7);
                 break;
             case R.id.tv_middle_xxny_area:
                 //休闲农业
-                startToImageNewsActivity(26,"休闲农业");
+                jump2TabPager(8);
                 break;
         }
+    }
+
+    private void jump2TabPager(int position){
+        Intent intent = new Intent();
+        intent.setClass(this,TabPagerActivity.class);
+        intent.putExtra(TabPagerActivity.INT_EXTRA, position);
+        startActivity(intent);
     }
 
     /**

@@ -21,12 +21,16 @@ import butterknife.Bind;
  */
 public class TabPagerActivity extends BaseActivity {
 
+    public static final String INT_EXTRA = "int_extra";
+
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
     @Bind(R.id.pager)
     ViewPager mViewPager;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+
+    private int pos;
 
     @Override
     protected int getLayoutId() {
@@ -36,8 +40,9 @@ public class TabPagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pos = getIntent().getIntExtra(INT_EXTRA,-1);
         setupToolbar();
-        setupViewPager();
+        setupViewPager(pos);
     }
 
     private void setupToolbar(){
@@ -49,11 +54,12 @@ public class TabPagerActivity extends BaseActivity {
         }
     }
 
-    private void setupViewPager() {
+    private void setupViewPager(int pos) {
         TabFragmentAdapter adapter = new TabFragmentAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
+        mViewPager.setCurrentItem(pos);
     }
 
     @Override

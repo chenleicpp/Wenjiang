@@ -3,11 +3,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="NewsImage"
-        android:layout_gravity="center"/>
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:id="@+id/gv_news"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:numColumns="3"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"/>
 
 
 </LinearLayout>

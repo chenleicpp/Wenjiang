@@ -1,11 +1,13 @@
 package com.sanshisoft.wenjiang.adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.sanshisoft.wenjiang.AppContext;
 import com.sanshisoft.wenjiang.R;
+import com.sanshisoft.wenjiang.common.ProjectType;
 import com.sanshisoft.wenjiang.ui.fragment.NewsExFragment;
 import com.sanshisoft.wenjiang.ui.fragment.NewsFragment;
 import com.sanshisoft.wenjiang.ui.fragment.NewsImageFragment;
@@ -24,6 +26,8 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("pos",i);
         switch (i){
             case 0:
                 return new NewsExFragment();
@@ -35,8 +39,9 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
             case 6:
                 return new NewsFragment();
             case 7:
+                return NewsImageFragment.newInstance(ProjectType.TYPE_WJTC,27);
             case 8:
-                return new NewsImageFragment();
+                return NewsImageFragment.newInstance(ProjectType.TYPE_XXNY,26);
         }
         return null;
     }

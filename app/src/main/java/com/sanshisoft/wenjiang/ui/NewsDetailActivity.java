@@ -36,6 +36,12 @@ import butterknife.Bind;
  * 四级新闻详情页
  */
 public class NewsDetailActivity extends BaseActivity {
+
+    public static final String NEWS_ID = "new_id";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String NEWS_TYPE = "type";
+    public static final String NEWS_CATEGORY = "category";
+
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
     @Bind(R.id.ib_titlebar_category)

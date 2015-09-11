@@ -26,18 +26,18 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("pos",i);
         switch (i){
             case 0:
-                return new NewsExFragment();
             case 1:
             case 2:
             case 3:
-            case 4:
-            case 5:
-            case 6:
                 return new NewsFragment();
+            case 4:
+                return NewsExFragment.newInstance(ProjectType.TYPE_DJGZ,4);
+            case 5:
+                return NewsExFragment.newInstance(ProjectType.TYPE_ZTZL,3);
+            case 6:
+                return NewsExFragment.newInstance(ProjectType.TYPE_ZWFW,2);
             case 7:
                 return NewsImageFragment.newInstance(ProjectType.TYPE_WJTC,27);
             case 8:

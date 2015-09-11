@@ -11,4 +11,14 @@ public class ProjectType {
     public static String TYPE_WJTC = "wjtc";
     //休闲农业
     public static String TYPE_XXNY = "xxny";
+    //公示公告
+    public static String TYPE_GSGG = "gsgg";
+    //农业咨询
+    //农业服务
+    //党建工作
+    public static String TYPE_DJGZ = "djgz";
+    //专题专栏
+    public static String TYPE_ZTZL = "ztzl";
+    //政务服务
+    public static String TYPE_ZWFW = "zwfw";
 }

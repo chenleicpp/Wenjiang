@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by chenleicpp on 2015/9/9.
+ * 温江特产，休闲农业
  */
 public class NewsImageFragment extends BaseFragment {
 

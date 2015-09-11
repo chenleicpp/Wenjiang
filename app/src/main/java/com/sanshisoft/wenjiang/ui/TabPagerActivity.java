@@ -59,6 +59,7 @@ public class TabPagerActivity extends BaseActivity {
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(9);
         mViewPager.setCurrentItem(pos);
     }
 

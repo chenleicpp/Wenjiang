@@ -30,4 +30,5 @@ dependencies {
     compile project(':pull')
     compile files('libs/universal-image-loader-1.9.1.jar')
     compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
 }

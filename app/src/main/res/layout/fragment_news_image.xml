@@ -3,13 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.handmark.pulltorefresh.library.PullToRefreshGridView
-        android:id="@+id/gv_news"
-        android:layout_height="match_parent"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/news_image_recyclerview"
         android:layout_width="match_parent"
-        android:numColumns="3"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"/>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="5dp"/>
 
 
 </LinearLayout>

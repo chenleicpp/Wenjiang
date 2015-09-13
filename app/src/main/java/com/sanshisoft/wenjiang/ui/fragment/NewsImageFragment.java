@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +20,13 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.adapter.ImageNewsAdapter;
+import com.sanshisoft.wenjiang.adapter.NewsImageAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseFragment;
 import com.sanshisoft.wenjiang.bean.ImageBean;
 import com.sanshisoft.wenjiang.bean.ImageList;
+import com.sanshisoft.wenjiang.common.BottomRecyclerOnScrollListener;
+import com.sanshisoft.wenjiang.common.OnImageClickListener;
 import com.sanshisoft.wenjiang.common.ProjectType;
 import com.sanshisoft.wenjiang.ui.NewsActivity;
 import com.sanshisoft.wenjiang.ui.NewsDetailActivity;
@@ -40,20 +45,21 @@ import butterknife.ButterKnife;
  * Created by chenleicpp on 2015/9/9.
  * 温江特产，休闲农业
  */
-public class NewsImageFragment extends BaseFragment {
+public class NewsImageFragment extends BaseFragment implements OnImageClickListener{
 
-    @Bind(R.id.gv_news)
-    PullToRefreshGridView gvNews;
+    @Bind(R.id.news_image_recyclerview)
+    RecyclerView mRecyclerView;
 
-    private GridView mGridView;
     private List<ImageBean> mDatas;
-    private ImageNewsAdapter mAdapter;
+    private NewsImageAdapter mAdapter;
     private int totalPage;
     private static final int PAGE_SIZE = 12;
     private int currentNum = 1;
+    private boolean isLoading = false;
 
     private String mProjectType;
     private int mCategoryId;
+    private boolean isFirstToast;
 
     public static Fragment newInstance(String projectType,int categoryId){
         Fragment fragment = new NewsImageFragment();
@@ -73,6 +79,7 @@ public class NewsImageFragment extends BaseFragment {
             mCategoryId = bundle.getInt(ProjectType.PROJECT_ID);
             setRetainInstance(true);
         }
+        isFirstToast = true;
     }
 
     @Nullable
@@ -81,40 +88,23 @@ public class NewsImageFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_news_image,container,false);
         ButterKnife.bind(this, view);
 
-        gvNews.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        gvNews.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),3);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.addOnScrollListener(new BottomRecyclerOnScrollListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-                currentNum++;
-                getDatas(currentNum);
-            }
-        });
-        mGridView = gvNews.getRefreshableView();
-        mDatas = new ArrayList<>();
-        mAdapter = new ImageNewsAdapter(getActivity());
-        getDatas(1);
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), NewsDetailActivity.class);
-                Bundle bundle = new Bundle();
-                if (mProjectType.equals(ProjectType.TYPE_WJTC)) {
-                    bundle.putString(NewsActivity.NEWS_CATEGORY, "温江特产");
-                } else {
-                    bundle.putString(NewsActivity.NEWS_CATEGORY, "休闲农业");
+            public void onLoadMore() {
+                if (!isLoading){
+                    currentNum++;
+                    getDatas(currentNum);
+                    isLoading = true;
                 }
-                bundle.putInt(NewsActivity.NEWS_ID, mDatas.get(position).getNew_id());
-                bundle.putInt(NewsActivity.CATEGORY_ID, mCategoryId);
-                intent.putExtras(bundle);
-                startActivity(intent);
             }
         });
+        mDatas = new ArrayList<>();
+        mAdapter = new NewsImageAdapter();
+        mAdapter.setOnImageClickListener(this);
+        getDatas(1);
+
         return view;
     }
 
@@ -141,21 +131,25 @@ public class NewsImageFragment extends BaseFragment {
                         if (currentNum == 1) {
                             mDatas.addAll(imageDatas);
                             mAdapter.setList(mDatas);
-                            mGridView.setAdapter(mAdapter);
+                            mRecyclerView.setAdapter(mAdapter);
                         } else if (currentNum <= totalPage) {
                             mDatas.addAll(imageDatas);
                             mAdapter.setList(mDatas);
                         } else if (currentNum > totalPage) {
-                            ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
+                            if (isFirstToast){
+                                ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
+                                isFirstToast = false;
+                            }
+
                         }
                     }else{
                         ToastUtils.quickToast(getActivity(), "尚无新闻，请稍后重试！");
                     }
-                    gvNews.onRefreshComplete();
                 }
             }else {
                 ToastUtils.quickToast(getActivity(),"服务器错误，请重试！");
             }
+            isLoading = false;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -169,7 +163,6 @@ public class NewsImageFragment extends BaseFragment {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            gvNews.onRefreshComplete();
             ToastUtils.quickToast(getActivity(), error.getMessage());
         }
     };
@@ -180,5 +173,21 @@ public class NewsImageFragment extends BaseFragment {
         }else {
             totalPage = (total / PAGE_SIZE) + 1;
         }
+    }
+
+    @Override
+    public void OnImageClick(ImageBean ib) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        if (mProjectType.equals(ProjectType.TYPE_WJTC)) {
+            bundle.putString(NewsActivity.NEWS_CATEGORY, "温江特产");
+        } else {
+            bundle.putString(NewsActivity.NEWS_CATEGORY, "休闲农业");
+        }
+        bundle.putInt(NewsActivity.NEWS_ID, ib.getNew_id());
+        bundle.putInt(NewsActivity.CATEGORY_ID, mCategoryId);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

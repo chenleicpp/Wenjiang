@@ -21,6 +21,7 @@ import java.util.List;
 /**
  * Created by chenleicpp on 2015/7/21.
  */
+@Deprecated
 public class ImageNewsAdapter extends BaseAdapter {
 
     private Context mCtx;

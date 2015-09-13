@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by chenleicpp on 2015/7/21.
  */
+@Deprecated
 public class NewsExAdapter extends BaseAdapter {
 
     private Context mCtx;

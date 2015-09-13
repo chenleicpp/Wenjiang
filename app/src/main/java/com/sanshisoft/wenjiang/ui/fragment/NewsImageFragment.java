@@ -53,7 +53,7 @@ public class NewsImageFragment extends BaseFragment implements OnImageClickListe
     private List<ImageBean> mDatas;
     private NewsImageAdapter mAdapter;
     private int totalPage;
-    private static final int PAGE_SIZE = 12;
+    private static final int PAGE_SIZE = 15;
     private int currentNum = 1;
     private boolean isLoading = false;
 

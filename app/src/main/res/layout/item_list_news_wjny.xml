@@ -1,0 +1,37 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <ImageView
+        android:id="@+id/iv_wjny_thumb"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/tv_wjny_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_wjny_thumb"
+        android:text="区农发局积极参加“消费满意在温江” 3.15主题宣传活动"
+        android:textColor="@color/primary_text"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:singleLine="true"/>
+
+    <TextView
+        android:id="@+id/tv_wjny_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/iv_wjny_thumb"
+        android:text="2015-3-18"
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

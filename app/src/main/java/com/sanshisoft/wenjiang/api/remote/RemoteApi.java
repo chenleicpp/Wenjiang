@@ -78,4 +78,13 @@ public class RemoteApi {
         params.put("page_size",size);
         ApiHttpClient.post(url,params,handler);
     }
+
+    public static void getWjnyTabList(AsyncHttpResponseHandler handler,int id,int num,int size){
+        String url = "getWjnyTabList.asp";
+        RequestParams params = new RequestParams();
+        params.put("category_id",id);
+        params.put("page_num",num);
+        params.put("page_size",size);
+        ApiHttpClient.post(url,params,handler);
+    }
 }

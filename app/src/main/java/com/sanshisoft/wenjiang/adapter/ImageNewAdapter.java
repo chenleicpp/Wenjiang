@@ -2,6 +2,7 @@ package com.sanshisoft.wenjiang.adapter;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.sanshisoft.wenjiang.AppConfig;
 import com.sanshisoft.wenjiang.R;
-import com.sanshisoft.wenjiang.bean.ImageBean;
-import com.sanshisoft.wenjiang.common.OnImageClickListener;
+import com.sanshisoft.wenjiang.bean.ImageNewBean;
+import com.sanshisoft.wenjiang.common.OnImageNewClickListener;
 
 import java.util.List;
 
@@ -22,21 +23,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by chenleicpp on 2015/9/13.
- * recycler样式的adapter
+ * Created by chenleicpp on 2015/9/20.
+ * 温江农业adapter
  */
-public class NewsImageAdapter extends RecyclerView.Adapter<NewsImageAdapter.ViewHolder> {
+public class ImageNewAdapter extends RecyclerView.Adapter<ImageNewAdapter.ViewHolder> {
 
-    private List<ImageBean> mDatas;
+    private List<ImageNewBean> mDatas;
     private DisplayImageOptions options;
-    private OnImageClickListener mListener;
+    private OnImageNewClickListener mListener;
 
-    public NewsImageAdapter(){
+    public ImageNewAdapter(){
         options = new DisplayImageOptions.Builder().cacheOnDisc(true)
                 .considerExifParams(true).build();
     }
 
-    public void setOnImageClickListener(OnImageClickListener listener){
+    public void setOnImageNewClickListener(OnImageNewClickListener listener){
         mListener = listener;
     }
 
@@ -44,35 +45,36 @@ public class NewsImageAdapter extends RecyclerView.Adapter<NewsImageAdapter.View
 
         @Override
         public void onClick(View v) {
-            ImageBean ib = (ImageBean) v.getTag();
+            ImageNewBean inb = (ImageNewBean) v.getTag();
             if (mListener != null) {
-                mListener.OnImageClick(ib);
+                mListener.OnImageClick(inb);
             }
         }
     };
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gridview_news,parent,false);
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_news_wjny,parent,false);
         return new ViewHolder(item);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ImageBean ib = mDatas.get(position);
-        holder.mTvTitle.setText(ib.getNew_title());
-        if (!ib.getNew_img().equals("pic/")){
-            String url = AppConfig.BASE_URL + ib.getNew_img();
-            ImageLoader.getInstance().displayImage(url, holder.mIvPhoto, options, new SimpleImageLoadingListener() {
+        ImageNewBean inb = mDatas.get(position);
+        holder.mTvTitle.setText(inb.getNew_title());
+        holder.mTvDate.setText(inb.getNew_date());
+        if (!inb.getNew_thumb().equals("/pic/")){
+            String url = AppConfig.BASE_URL + inb.getNew_thumb();
+            ImageLoader.getInstance().displayImage(url, holder.mIvThumb, options, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
                 }
             });
         }else {
-            holder.mIvPhoto.setImageResource(R.drawable.image_loading);
+            holder.mIvThumb.setImageResource(R.drawable.image_loading);
         }
-        holder.itemView.setTag(ib);
+        holder.itemView.setTag(inb);
         holder.itemView.setOnClickListener(mClickListener);
     }
 
@@ -82,10 +84,12 @@ public class NewsImageAdapter extends RecyclerView.Adapter<NewsImageAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_image_news)
-        ImageView mIvPhoto;
-        @Bind(R.id.tv_image_title)
+        @Bind(R.id.iv_wjny_thumb)
+        ImageView mIvThumb;
+        @Bind(R.id.tv_wjny_title)
         TextView mTvTitle;
+        @Bind(R.id.tv_wjny_date)
+        TextView mTvDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -93,8 +97,9 @@ public class NewsImageAdapter extends RecyclerView.Adapter<NewsImageAdapter.View
         }
     }
 
-    public void setList(List<ImageBean> list){
+    public void setList(List<ImageNewBean> list){
         this.mDatas = list;
         notifyDataSetChanged();
     }
+
 }

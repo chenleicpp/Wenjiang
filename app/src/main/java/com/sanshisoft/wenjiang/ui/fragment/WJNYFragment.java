@@ -15,14 +15,14 @@ import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
-import com.sanshisoft.wenjiang.adapter.NewsExRecyclerAdapter;
+import com.sanshisoft.wenjiang.adapter.ImageNewAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseFragment;
-import com.sanshisoft.wenjiang.bean.NewsExBean;
-import com.sanshisoft.wenjiang.bean.NewsExList;
+import com.sanshisoft.wenjiang.bean.ImageNewBean;
+import com.sanshisoft.wenjiang.bean.ImageNewList;
 import com.sanshisoft.wenjiang.common.DividerItemDecoration;
 import com.sanshisoft.wenjiang.common.EndlessRecyclerOnScrollListener;
-import com.sanshisoft.wenjiang.common.OnNewsExClickListener;
+import com.sanshisoft.wenjiang.common.OnImageNewClickListener;
 import com.sanshisoft.wenjiang.common.ProjectType;
 import com.sanshisoft.wenjiang.ui.NewsDetailActivity;
 
@@ -37,29 +37,29 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by chenleicpp on 2015/9/9.
- * 党建工作，专题专栏，政务服务
+ * Created by chenleicpp on 2015/9/20.
+ * 温江农业
  */
-public class NewsExFragment extends BaseFragment implements OnNewsExClickListener{
+public class WJNYFragment extends BaseFragment implements OnImageNewClickListener{
 
     private String mProjectType;
     private int mCategoryId;
     private String mCategoryName;
 
-    @Bind(R.id.news_ex_recyclerview)
+    @Bind(R.id.wjny_recyclerview)
     RecyclerView mRecyclerView;
 
-    private NewsExRecyclerAdapter mAdapter;
+    private ImageNewAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
     private int currentNum = 1;
     private int totalPage;
-    private List<NewsExBean> mDatas;
+    private List<ImageNewBean> mDatas;
 
     private static final int PAGE_SIZE = 10;
 
     public static Fragment newInstance(String projectType,int categoryId){
-        Fragment fragment = new NewsExFragment();
+        Fragment fragment = new WJNYFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ProjectType.PROJECT_TYPE, projectType);
         bundle.putInt(ProjectType.PROJECT_ID,categoryId);
@@ -73,12 +73,8 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
         if (savedInstanceState == null) {
             Bundle bundle = getArguments();
             mProjectType = bundle.getString(ProjectType.PROJECT_TYPE);
-            if (mProjectType.equals(ProjectType.TYPE_DJGZ)){
-                mCategoryName = "党建工作";
-            }else if (mProjectType.equals(ProjectType.TYPE_ZTZL)){
-                mCategoryName = "专题专栏";
-            }else if (mProjectType.equals(ProjectType.TYPE_ZWFW)){
-                mCategoryName = "政务服务";
+            if (mProjectType.equals(ProjectType.TYPE_WJNY)){
+                mCategoryName = "温江农业";
             }
             mCategoryId = bundle.getInt(ProjectType.PROJECT_ID);
             setRetainInstance(true);
@@ -93,7 +89,7 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news_ex,container,false);
+        View view = inflater.inflate(R.layout.fragment_wjny,container,false);
         ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -107,27 +103,15 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
             }
         });
         mDatas = new ArrayList<>();
-        mAdapter = new NewsExRecyclerAdapter(getActivity());
-        mAdapter.setOnNewsExClickListener(this);
+        mAdapter = new ImageNewAdapter();
+        mAdapter.setOnImageNewClickListener(this);
 
         getDatas(1);
         return view;
     }
 
-    @Override
-    public void OnNewsExClick(NewsExBean neb) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), NewsDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(NewsDetailActivity.NEWS_CATEGORY, mCategoryName);
-        bundle.putInt(NewsDetailActivity.NEWS_ID, neb.getNew_id());
-        bundle.putInt(NewsDetailActivity.CATEGORY_ID,mCategoryId);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
     private void getDatas(int page){
-        RemoteApi.getDjgzList(mHandler, mCategoryId, page, PAGE_SIZE);
+        RemoteApi.getWjnyTabList(mHandler, mCategoryId, page, PAGE_SIZE);
     }
 
     private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
@@ -148,10 +132,10 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
             Gson gson = new Gson();
             Log.d("test", result);
             if (result != null && !StringUtils.isEmpty(result)){
-                NewsExList news = gson.fromJson(result, NewsExList.class);
+                ImageNewList news = gson.fromJson(result, ImageNewList.class);
                 updateTotalPage(news.getTotal_count());
                 if (news != null) {
-                    List<NewsExBean> newsData = news.getData();
+                    List<ImageNewBean> newsData = news.getData();
                     if (news.getTotal_count() > 0) {
                         if (currentNum == 1) {
                             mDatas.addAll(newsData);
@@ -183,5 +167,17 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
         }else {
             totalPage = (total / PAGE_SIZE) + 1;
         }
+    }
+
+    @Override
+    public void OnImageClick(ImageNewBean inb) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(NewsDetailActivity.NEWS_CATEGORY, mCategoryName);
+        bundle.putInt(NewsDetailActivity.NEWS_ID, inb.getNew_id());
+        bundle.putInt(NewsDetailActivity.CATEGORY_ID,mCategoryId);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

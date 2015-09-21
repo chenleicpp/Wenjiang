@@ -31,4 +31,9 @@ dependencies {
     compile files('libs/universal-image-loader-1.9.1.jar')
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile "com.android.support:support-v4:+"
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
 }

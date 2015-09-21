@@ -1,12 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/news_ex_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal|top">
+
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/news_ex_slider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
 
 
-</LinearLayout>
+</FrameLayout>

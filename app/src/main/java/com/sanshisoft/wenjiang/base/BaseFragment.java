@@ -18,8 +18,6 @@ import com.sanshisoft.wenjiang.common.DialogControl;
  */
 public class BaseFragment extends Fragment {
 
-
-
     public AppContext getApplication() {
         return (AppContext) getActivity().getApplication();
     }
@@ -53,4 +51,5 @@ public class BaseFragment extends Fragment {
         }
         return null;
     }
+
 }

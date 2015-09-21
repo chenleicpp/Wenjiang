@@ -10,7 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
@@ -31,6 +37,7 @@ import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,7 +47,7 @@ import butterknife.ButterKnife;
  * Created by chenleicpp on 2015/9/9.
  * 党建工作，专题专栏，政务服务
  */
-public class NewsExFragment extends BaseFragment implements OnNewsExClickListener{
+public class NewsExFragment extends BaseFragment implements OnNewsExClickListener,BaseSliderView.OnSliderClickListener{
 
     private String mProjectType;
     private int mCategoryId;
@@ -49,14 +56,16 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
     @Bind(R.id.news_ex_recyclerview)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.news_ex_slider)
+    SliderLayout mSlider;
+
     private NewsExRecyclerAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
     private int currentNum = 1;
     private int totalPage;
-    private List<NewsExBean> mDatas;
-
     private static final int PAGE_SIZE = 10;
+    private List<NewsExBean> mDatas;
 
     public static Fragment newInstance(String projectType,int categoryId){
         Fragment fragment = new NewsExFragment();
@@ -110,9 +119,42 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
         mAdapter = new NewsExRecyclerAdapter(getActivity());
         mAdapter.setOnNewsExClickListener(this);
 
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
+        header.attachTo(mRecyclerView, true);
+
+        getSliderData();
+
         getDatas(1);
         return view;
     }
+
+    private void getSliderData(){
+        HashMap<String,String> url_maps = new HashMap<String, String>();
+        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        for(String name : url_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(getActivity());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mSlider.addSlider(textSliderView);
+        }
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setDuration(4000);
+    }
+
 
     @Override
     public void OnNewsExClick(NewsExBean neb) {
@@ -162,7 +204,7 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
                             mDatas.addAll(newsData);
                             mAdapter.setList(mDatas);
                         } else if (currentNum > totalPage && currentNum != 1) {
-                            ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
+                            //ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
                         }
                     }else{
                         ToastUtils.quickToast(getActivity(), "尚无新闻，请稍后重试！");
@@ -183,5 +225,10 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
         }else {
             totalPage = (total / PAGE_SIZE) + 1;
         }
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        Toast.makeText(getActivity(), slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
     }
 }

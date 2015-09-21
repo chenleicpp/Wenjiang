@@ -143,7 +143,7 @@ public class NewsImageFragment extends BaseFragment implements OnImageClickListe
 
                         }
                     }else{
-                        ToastUtils.quickToast(getActivity(), "尚无新闻，请稍后重试！");
+                        //ToastUtils.quickToast(getActivity(), "尚无新闻，请稍后重试！");
                     }
                 }
             }else {

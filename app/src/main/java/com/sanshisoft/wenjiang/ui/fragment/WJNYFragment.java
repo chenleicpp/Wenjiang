@@ -10,7 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
@@ -31,6 +37,7 @@ import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,7 +47,7 @@ import butterknife.ButterKnife;
  * Created by chenleicpp on 2015/9/20.
  * 温江农业
  */
-public class WJNYFragment extends BaseFragment implements OnImageNewClickListener{
+public class WJNYFragment extends BaseFragment implements OnImageNewClickListener,BaseSliderView.OnSliderClickListener{
 
     private String mProjectType;
     private int mCategoryId;
@@ -48,6 +55,9 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
 
     @Bind(R.id.wjny_recyclerview)
     RecyclerView mRecyclerView;
+
+    @Bind(R.id.wjny_slider)
+    SliderLayout mSlider;
 
     private ImageNewAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
@@ -106,8 +116,40 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
         mAdapter = new ImageNewAdapter();
         mAdapter.setOnImageNewClickListener(this);
 
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
+        header.attachTo(mRecyclerView, true);
+
+        getSliderData();
+
         getDatas(1);
         return view;
+    }
+
+    private void getSliderData(){
+        HashMap<String,String> url_maps = new HashMap<String, String>();
+        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        for(String name : url_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(getActivity());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mSlider.addSlider(textSliderView);
+        }
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setDuration(4000);
     }
 
     private void getDatas(int page){
@@ -146,7 +188,7 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
                             mDatas.addAll(newsData);
                             mAdapter.setList(mDatas);
                         } else if (currentNum > totalPage && currentNum != 1) {
-                            ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
+                            //ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
                         }
                     }else{
                         ToastUtils.quickToast(getActivity(), "尚无新闻，请稍后重试！");
@@ -179,5 +221,10 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
         bundle.putInt(NewsDetailActivity.CATEGORY_ID,mCategoryId);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        Toast.makeText(getActivity(),slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
     }
 }

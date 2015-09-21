@@ -161,7 +161,7 @@ public class NewsExFragment extends BaseFragment implements OnNewsExClickListene
                         } else if (currentNum <= totalPage) {
                             mDatas.addAll(newsData);
                             mAdapter.setList(mDatas);
-                        } else if (currentNum > totalPage) {
+                        } else if (currentNum > totalPage && currentNum != 1) {
                             ToastUtils.quickToast(getActivity(), "最后一页，尚无更多新闻");
                         }
                     }else{

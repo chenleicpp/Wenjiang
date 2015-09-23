@@ -36,4 +36,6 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
+    debugCompile 'me.drakeet.library:crashwoodpecker:0.9.7'
+    releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
 }

@@ -11,6 +11,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.sanshisoft.wenjiang.api.ApiHttpClient;
 
+import me.drakeet.library.CrashWoodpecker;
+
 /**
  * Created by chenleicpp on 2015/7/19.
  */
@@ -24,6 +26,7 @@ public class AppContext extends Application{
         instance = this;
         init();
         initImageLoader(getApplicationContext());
+        CrashWoodpecker.fly().to(this);
     }
 
     /**

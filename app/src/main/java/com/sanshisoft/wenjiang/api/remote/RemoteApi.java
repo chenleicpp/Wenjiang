@@ -79,12 +79,31 @@ public class RemoteApi {
         ApiHttpClient.post(url,params,handler);
     }
 
+    /**
+     * 获取导航滚动页温江农业新闻列表（列表有图片预览）
+     * @param handler
+     * @param id
+     * @param num
+     * @param size
+     */
     public static void getWjnyTabList(AsyncHttpResponseHandler handler,int id,int num,int size){
         String url = "getWjnyTabList.asp";
         RequestParams params = new RequestParams();
         params.put("category_id",id);
         params.put("page_num",num);
         params.put("page_size",size);
+        ApiHttpClient.post(url,params,handler);
+    }
+
+    /**
+     * 获取导航滚动页图片轮播集合（每个类别4张）
+     * @param handler
+     * @param id
+     */
+    public static void getImagesPagerList(AsyncHttpResponseHandler handler,int id){
+        String url = "getImagesPagerList.asp";
+        RequestParams params = new RequestParams();
+        params.put("category_id",id);
         ApiHttpClient.post(url,params,handler);
     }
 }

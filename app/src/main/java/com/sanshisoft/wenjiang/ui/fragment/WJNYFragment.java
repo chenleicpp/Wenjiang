@@ -20,12 +20,15 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.percolate.caffeine.ToastUtils;
+import com.sanshisoft.wenjiang.AppConfig;
 import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.adapter.ImageNewAdapter;
 import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseFragment;
 import com.sanshisoft.wenjiang.bean.ImageNewBean;
 import com.sanshisoft.wenjiang.bean.ImageNewList;
+import com.sanshisoft.wenjiang.bean.SliderBean;
+import com.sanshisoft.wenjiang.bean.SliderList;
 import com.sanshisoft.wenjiang.common.DividerItemDecoration;
 import com.sanshisoft.wenjiang.common.EndlessRecyclerOnScrollListener;
 import com.sanshisoft.wenjiang.common.OnImageNewClickListener;
@@ -126,31 +129,53 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
     }
 
     private void getSliderData(){
-        HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-        for(String name : url_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra",name);
-
-            mSlider.addSlider(textSliderView);
-        }
-        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mSlider.setCustomAnimation(new DescriptionAnimation());
-        mSlider.setDuration(4000);
+        RemoteApi.getImagesPagerList(mHander2,mCategoryId);
     }
+
+    private AsyncHttpResponseHandler mHander2 = new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            try {
+                String result = new String(responseBody,"gb2312");
+                Gson gson = new Gson();
+                Log.d("test", result);
+                if (result != null && !StringUtils.isEmpty(result)){
+                    SliderList sl = gson.fromJson(result,SliderList.class);
+                    if (sl != null){
+                        List<SliderBean> datas = sl.getData();
+                        for (int i=0;i<datas.size();i++){
+                            TextSliderView textSliderView = new TextSliderView(getActivity());
+                            textSliderView
+                                    .description(datas.get(i).getTitle())
+                                    .image(AppConfig.BASE_URL + datas.get(i).getThumb())
+                                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                                    .setOnSliderClickListener(WJNYFragment.this);
+
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra_id", datas.get(i).getId()+"");
+
+                            mSlider.addSlider(textSliderView);
+                        }
+                        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+                        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                        mSlider.setCustomAnimation(new DescriptionAnimation());
+                        mSlider.setDuration(4000);
+                    }
+                }else {
+                    ToastUtils.quickToast(getActivity(),"服务器错误，请重试！");
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                ToastUtils.quickToast(getActivity(), "服务器错误，请重试！");
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            ToastUtils.quickToast(getActivity(), error.getMessage());
+        }
+    };
 
     private void getDatas(int page){
         RemoteApi.getWjnyTabList(mHandler, mCategoryId, page, PAGE_SIZE);
@@ -225,6 +250,14 @@ public class WJNYFragment extends BaseFragment implements OnImageNewClickListene
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(getActivity(),slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+        int id = Integer.parseInt(slider.getBundle().get("extra_id").toString());
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(NewsDetailActivity.NEWS_CATEGORY, mCategoryName);
+        bundle.putInt(NewsDetailActivity.NEWS_ID, id);
+        bundle.putInt(NewsDetailActivity.CATEGORY_ID,mCategoryId);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

@@ -29,22 +29,31 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         switch (i){
             case 0:
+                //温江农业
                 return WJNYFragment.newInstance(ProjectType.TYPE_WJNY,9);
             case 1:
+                //公示公告
                 return NewsFragment.newInstance(ProjectType.TYPE_GSGG,7);
             case 2:
+                //农业咨询
                 return NewsFragment.newInstance(ProjectType.TYPE_NYZX,8);
             case 3:
+                //农业服务
                 return NewsFragment.newInstance(ProjectType.TYPE_NYFW,16);
             case 4:
+                //党建工作
                 return NewsExFragment.newInstance(ProjectType.TYPE_DJGZ,4);
             case 5:
+                //专题专栏
                 return NewsExFragment.newInstance(ProjectType.TYPE_ZTZL,3);
             case 6:
+                //政务服务
                 return NewsExFragment.newInstance(ProjectType.TYPE_ZWFW,2);
             case 7:
+                //温江特产
                 return NewsImageFragment.newInstance(ProjectType.TYPE_WJTC,27);
             case 8:
+                //休闲农业
                 return NewsImageFragment.newInstance(ProjectType.TYPE_XXNY,26);
         }
         return null;

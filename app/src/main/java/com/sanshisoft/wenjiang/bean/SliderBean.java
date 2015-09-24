@@ -9,6 +9,7 @@ public class SliderBean {
     private String title;
     private String newUrl;
     private String thumb;
+    private int categoryId;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class SliderBean {
         this.thumb = thumb;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @Override
     public String toString() {
         return "SliderBean{" +
@@ -49,6 +58,7 @@ public class SliderBean {
                 ", title='" + title + '\'' +
                 ", newUrl='" + newUrl + '\'' +
                 ", thumb='" + thumb + '\'' +
+                ", categoryId=" + categoryId +
                 '}';
     }
 }

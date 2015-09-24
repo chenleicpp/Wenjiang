@@ -304,7 +304,9 @@ public class MainActivity extends BaseActivity implements BaseSliderView.OnSlide
 
                             textSliderView.bundle(new Bundle());
                             textSliderView.getBundle()
-                                    .putString("extra_id", datas.get(i).getId()+"");
+                                    .putString("extra_id", datas.get(i).getId() + "");
+                            textSliderView.getBundle()
+                                    .putString("extra_category", datas.get(i).getCategoryId()+"");
 
                             mSlider.addSlider(textSliderView);
                         }
@@ -330,6 +332,15 @@ public class MainActivity extends BaseActivity implements BaseSliderView.OnSlide
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-
+        int id = Integer.parseInt(slider.getBundle().get("extra_id").toString());
+        int category_id = Integer.parseInt(slider.getBundle().get("extra_category").toString());
+        Intent intent = new Intent();
+        intent.setClass(this, NewsDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(NewsDetailActivity.NEWS_CATEGORY, "新闻详情");
+        bundle.putInt(NewsDetailActivity.NEWS_ID, id);
+        bundle.putInt(NewsDetailActivity.CATEGORY_ID,category_id);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

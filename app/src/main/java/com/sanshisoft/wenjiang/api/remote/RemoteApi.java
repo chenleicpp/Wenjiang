@@ -106,4 +106,14 @@ public class RemoteApi {
         params.put("category_id",id);
         ApiHttpClient.post(url,params,handler);
     }
+
+    /**
+     * 获取首页导航滚动页图片轮播集合
+     * @param handler
+     */
+    public static void getHomeImagesList(AsyncHttpResponseHandler handler){
+        String url = "getHomeImagesList.asp";
+        RequestParams params = new RequestParams();
+        ApiHttpClient.post(url,params,handler);
+    }
 }

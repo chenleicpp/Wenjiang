@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,13 +12,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.percolate.caffeine.ToastUtils;
+import com.sanshisoft.wenjiang.AppConfig;
 import com.sanshisoft.wenjiang.R;
+import com.sanshisoft.wenjiang.api.remote.RemoteApi;
 import com.sanshisoft.wenjiang.base.BaseActivity;
+import com.sanshisoft.wenjiang.bean.SliderBean;
+import com.sanshisoft.wenjiang.bean.SliderList;
+
+import org.apache.http.Header;
+import org.kymjs.kjframe.utils.StringUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements BaseSliderView.OnSliderClickListener{
 
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
@@ -50,6 +68,9 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.ll_footer_tel_area)
     LinearLayout llFooterTelArea;
 
+    @Bind(R.id.home_slider)
+    SliderLayout mSlider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +81,8 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, CategoryActivity.class));
             }
         });
+
+        getSliderData();
     }
 
     @Override
@@ -254,5 +277,59 @@ public class MainActivity extends BaseActivity {
         bundle.putString(ImageNewsActivity.CATEGORY_NAME, category_name);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    private void getSliderData(){
+        RemoteApi.getHomeImagesList(mHander2);
+    }
+
+    private AsyncHttpResponseHandler mHander2 = new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            try {
+                String result = new String(responseBody,"gb2312");
+                Gson gson = new Gson();
+                Log.d("test", result);
+                if (result != null && !StringUtils.isEmpty(result)){
+                    SliderList sl = gson.fromJson(result,SliderList.class);
+                    if (sl != null){
+                        List<SliderBean> datas = sl.getData();
+                        for (int i=0;i<datas.size();i++){
+                            TextSliderView textSliderView = new TextSliderView(MainActivity.this);
+                            textSliderView
+                                    .description(datas.get(i).getTitle())
+                                    .image(AppConfig.BASE_URL + datas.get(i).getThumb())
+                                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                                    .setOnSliderClickListener(MainActivity.this);
+
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra_id", datas.get(i).getId()+"");
+
+                            mSlider.addSlider(textSliderView);
+                        }
+                        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+                        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                        mSlider.setCustomAnimation(new DescriptionAnimation());
+                        mSlider.setDuration(4000);
+                    }
+                }else {
+                    ToastUtils.quickToast(MainActivity.this, "服务器错误，请重试！");
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                ToastUtils.quickToast(MainActivity.this, "服务器错误，请重试！");
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            ToastUtils.quickToast(MainActivity.this, error.getMessage());
+        }
+    };
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
     }
 }

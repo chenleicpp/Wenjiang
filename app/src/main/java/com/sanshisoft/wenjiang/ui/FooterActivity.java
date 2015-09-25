@@ -35,6 +35,7 @@ public class FooterActivity extends BaseActivity {
     private static final String SINA_URL = "http://weibo.com/wjncfzj";
     private static final String TENGXUN_URL = "http://t.qq.com/wjqncfzj";
     private static final String CONTACT_URL = "http://www.wjagri.cn/show_app_lxwm.asp?showid=2";
+    private static final String WEIXIN_URL = "http://www.wjagri.cn/show_app.asp?showid=3";
     @Bind(R.id.ib_titlebar_back)
     ImageView ibTitlebarBack;
     @Bind(R.id.ib_titlebar_category)
@@ -56,8 +57,11 @@ public class FooterActivity extends BaseActivity {
             type = bundle.getInt(TYPE);
         }
         if (type == TYPE_WEIXIN){
-            webviewFooter.setVisibility(View.GONE);
-            ivFooter.setVisibility(View.VISIBLE);
+//            webviewFooter.setVisibility(View.GONE);
+//            ivFooter.setVisibility(View.VISIBLE);
+            webviewFooter.setVisibility(View.VISIBLE);
+            ivFooter.setVisibility(View.GONE);
+            webviewFooter.loadUrl(WEIXIN_URL);
         }else if (type == TYPE_SINA){
             webviewFooter.setVisibility(View.VISIBLE);
             ivFooter.setVisibility(View.GONE);

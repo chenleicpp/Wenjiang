@@ -116,4 +116,16 @@ public class RemoteApi {
         RequestParams params = new RequestParams();
         ApiHttpClient.post(url,params,handler);
     }
+
+    /**
+     * 获取关于列表
+     * @param handler
+     * @param size
+     */
+    public static void getAboutusList(AsyncHttpResponseHandler handler,int size){
+        String url = "getAboutusList.asp";
+        RequestParams params = new RequestParams();
+        params.put("pgsize",size);
+        ApiHttpClient.post(url,params,handler);
+    }
 }

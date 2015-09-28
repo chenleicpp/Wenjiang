@@ -1,6 +1,7 @@
 package com.sanshisoft.wenjiang.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import com.percolate.caffeine.ToastUtils;
 import com.sanshisoft.wenjiang.R;
 import com.sanshisoft.wenjiang.base.BaseActivity;
 
+import org.kymjs.kjframe.utils.StringUtils;
+
 import java.lang.reflect.Field;
 
 import butterknife.Bind;
@@ -27,6 +30,7 @@ import butterknife.Bind;
 public class FooterActivity extends BaseActivity {
 
     public static final String TYPE = "type";
+    public static final String URL = "url";
 
     public static final int TYPE_SINA = 1;
     public static final int TYPE_TENGXUN = 2;
@@ -46,7 +50,17 @@ public class FooterActivity extends BaseActivity {
     ImageView ivFooter;
 
     private int type;
+    private String url;
     private ProgressDialog dialog;
+
+    public static Intent newIntent(Context context,String url){
+        Intent intent = new Intent(context,FooterActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(TYPE, TYPE_CONTACT);
+        bundle.putString(URL, url);
+        intent.putExtras(bundle);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +69,7 @@ public class FooterActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             type = bundle.getInt(TYPE);
+            url = bundle.getString(URL);
         }
         if (type == TYPE_WEIXIN){
 //            webviewFooter.setVisibility(View.GONE);
@@ -71,9 +86,11 @@ public class FooterActivity extends BaseActivity {
             ivFooter.setVisibility(View.GONE);
             webviewFooter.loadUrl(TENGXUN_URL);
         }else if (type == TYPE_CONTACT){
-            webviewFooter.setVisibility(View.VISIBLE);
-            ivFooter.setVisibility(View.GONE);
-            webviewFooter.loadUrl(CONTACT_URL);
+            if (!StringUtils.isEmpty(url)){
+                webviewFooter.setVisibility(View.VISIBLE);
+                ivFooter.setVisibility(View.GONE);
+                webviewFooter.loadUrl(url);
+            }
         }
 
         ibTitlebarBack.setOnClickListener(new View.OnClickListener() {

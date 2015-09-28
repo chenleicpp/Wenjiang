@@ -128,7 +128,8 @@ public class MainActivity extends BaseActivity implements BaseSliderView.OnSlide
 //                Uri uri = Uri.parse("tel:028-82727971");
 //                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
 //                startActivity(intent);
-                startToFooterActivity(FooterActivity.TYPE_CONTACT);
+//                startToFooterActivity(FooterActivity.TYPE_CONTACT);
+                startActivity(new Intent(MainActivity.this,AboutActivity.class));
                 break;
         }
     }

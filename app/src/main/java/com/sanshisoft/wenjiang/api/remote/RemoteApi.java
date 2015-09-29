@@ -128,4 +128,14 @@ public class RemoteApi {
         params.put("pgsize",size);
         ApiHttpClient.post(url,params,handler);
     }
+
+    /**
+     * 版本更新
+     * @param handler
+     */
+    public static void getUpdate(AsyncHttpResponseHandler handler){
+        String url = "getUpdate.asp";
+        RequestParams params = new RequestParams();
+        ApiHttpClient.post(url,params,handler);
+    }
 }

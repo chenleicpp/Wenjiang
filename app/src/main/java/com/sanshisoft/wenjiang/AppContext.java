@@ -2,6 +2,8 @@ package com.sanshisoft.wenjiang;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -20,11 +22,18 @@ public class AppContext extends Application{
 
     private static AppContext instance;
 
+    private PackageInfo mPackageInfo;
+
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         init();
+        try {
+            mPackageInfo = getPackageManager().getPackageInfo(getPackageName(),0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         initImageLoader(getApplicationContext());
         CrashWoodpecker.fly().to(this);
     }
@@ -53,5 +62,13 @@ public class AppContext extends Application{
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    public int getVersionCode(){
+        return mPackageInfo.versionCode;
+    }
+
+    public String getAppName(){
+        return mPackageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
     }
 }

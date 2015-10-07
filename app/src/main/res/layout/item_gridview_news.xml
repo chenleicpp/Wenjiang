@@ -11,7 +11,7 @@
         android:layout_width="120dp"
         android:layout_height="90dp"
         android:scaleType="fitXY"
-        android:src="@drawable/image_loading"/>
+        android:src="@drawable/image_loading_default"/>
 
     <TextView
         android:id="@+id/tv_image_title"

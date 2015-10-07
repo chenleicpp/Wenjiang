@@ -74,7 +74,7 @@ public class ImageNewsAdapter extends BaseAdapter {
                 }
             });
         }else {
-            holder.ivPic.setImageResource(R.drawable.image_loading);
+            holder.ivPic.setImageResource(R.drawable.image_loading_default);
         }
         return convertView;
     }

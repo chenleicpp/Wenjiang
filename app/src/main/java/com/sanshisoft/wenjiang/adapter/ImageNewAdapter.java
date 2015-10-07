@@ -72,7 +72,7 @@ public class ImageNewAdapter extends RecyclerView.Adapter<ImageNewAdapter.ViewHo
                 }
             });
         }else {
-            holder.mIvThumb.setImageResource(R.drawable.image_loading);
+            holder.mIvThumb.setImageResource(R.drawable.image_loading_default);
         }
         holder.itemView.setTag(inb);
         holder.itemView.setOnClickListener(mClickListener);

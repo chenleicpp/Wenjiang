@@ -70,7 +70,7 @@ public class NewsImageAdapter extends RecyclerView.Adapter<NewsImageAdapter.View
                 }
             });
         }else {
-            holder.mIvPhoto.setImageResource(R.drawable.image_loading);
+            holder.mIvPhoto.setImageResource(R.drawable.image_loading_default);
         }
         holder.itemView.setTag(ib);
         holder.itemView.setOnClickListener(mClickListener);
